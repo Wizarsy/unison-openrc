@@ -42,7 +42,7 @@ start_pre() {
     eerror "${RC_SVCNAME} cannot be started directly. You must create" 
     eerror "symbolic links to it for the profiles you want to start"
     return 1
-  elif [ ! -e "${HOME}/.unison/${profile}" ]; then
+  elif [ ! -e "${HOME}/.unison/${profile}.prf" ]; then
     eerror "Profile ${profile}.prf not found in ${HOME}/.unison"
     return 1
   fi
