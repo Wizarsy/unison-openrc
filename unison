@@ -29,7 +29,7 @@ command_args="${profile} -batch -killserver -log -logfile ${profile}.log -repeat
 
 depend() {
   [ "${rc_need+set}" = "set" ] && return 0
-  if "$(grep -qE "^root ?= ?(ssh|socket 2> /dev/null)" "$profile")"; then
+  if "$(grep -qE '^root ?= ?(ssh|socket)' "$profile" 2> /dev/null)"; then
     need net
     ewarn "You have configured a remote root in ${profile}.prf"
     ewarn "You need to add rc_need=\"net.FOO\" to your ${HOME}/.config/rc/conf.d/${RC_SVCNAME}"
