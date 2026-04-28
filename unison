@@ -27,10 +27,23 @@ profile="${RC_SVCNAME#*.}"
 command="/usr/bin/unison"
 command_args="${profile} -batch -killserver -log -logfile ${profile}.log -repeat watch+${watch_scan_interval:-1800}"
 
+depend() {
+  [ "${rc_need+set}" = "set" ] && return 0
+  if "$(grep -qE "^root ?= ?(ssh|socket 2> /dev/null)" "$profile")"; then
+    need net
+    ewarn "You have configured a remote root in ${profile}.prf"
+    ewarn "You need to add rc_need=\"net.FOO\" to your ${HOME}/.config/rc/conf.d/${RC_SVCNAME}"
+    ewarn "where FOO is your network interface"
+  fi
+}
+
 start_pre() {
   if [ "$profile" = "$RC_SVCNAME" ]; then
     eerror "${RC_SVCNAME} cannot be started directly. You must create" 
     eerror "symbolic links to it for the profiles you want to start"
+    return 1
+  elif [ ! -e "${HOME}/.unison/${profile}" ]; then
+    eerror "Profile ${profile}.prf not found in ${HOME}/.unison"
     return 1
   fi
 }
