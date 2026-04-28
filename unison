@@ -28,13 +28,9 @@ command="/usr/bin/unison"
 command_args="${profile} -batch -killserver -log -logfile ${profile}.log -repeat watch+${watch_scan_interval:-1800}"
 
 start_pre() {
-  ! [ "$profile" = "$RC_SVCNAME" ] || profile="default"
-  if ! [ -e "${HOME}/.unison/${profile}.prf" ]; then
-    eerror "${profile}.prf not found. You must create"
-    eerror "a profile file for the profiles you want to start."
-    eerror "If you want to start a profile different from the" 
-    eerror "default profile, you must create a symbolic link"
-    eerror "to it for the profile you want to start"
+  if [ "$profile" = "$RC_SVCNAME" ]; then
+    eerror "${RC_SVCNAME} cannot be started directly. You must create" 
+    eerror "symbolic links to it for the profiles you want to start"
     return 1
   fi
 }
